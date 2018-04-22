@@ -1,24 +1,105 @@
 
 include "include/vec2.bzz"
+# Threshold to detect obstacle
+delta = 0.1
+left_ws = 5.0
+right_ws = 5.0
+pi = 22.0/7.0
+tol = 1 #degree tolerance
+counter = -1
 
 
+function rad2deg(angle){
+	deg = angle*180/pi
+	return deg
+}
 
-# Executed at init time
+function deg2rad(angle){
+	rad = angle*pi/180
+	return rad
+}
+
+
+# Accumulator of neighbor LJ interactions
+function lj_sum(rid, data, accum) {
+  return math.vec2.add(data, accum)
+}
+
+function reading2vec(rid, reading){
+    return math.vec2.newp(reading.value, reading.angle)
+}
+
+# Accumulate proximity readings
+function get_range() {
+	var range = math.vec2.new(0.0, 0.0)
+  cart = map(proximity, reading2vec)
+  range = reduce(cart, lj_sum, range)
+
+	return range
+}
+
+function c_randomwalk(rid, theta_prev){
+	rho = math.rng.uniform(0.0,1.0)  #0.8
+	log(rho)
+  mu = 0.0
+	a = math.cos(theta_prev - mu)
+	theta = (1-rho^2)/((2*pi)*(1+ rho^2 - 2*rho*a))
+	#log(rad2deg(theta)) 
+	
+	if (rad2deg(theta_prev)> (rad2deg(theta)-tol) and rad2deg(theta_prev)<(rad2deg(theta)+tol)){
+		set_wheels(left_ws, right_ws)
+		}
+	else {
+		  #gotoc(math.sin(theta),math.cos(theta))
+			set_wheels(1.0, -1.0) 
+	}
+
+}
+
+#Obstacle avoidance
+function avoid(){
+	stepsize = 25
+	accum = get_range()
+	len = math.vec2.length(accum)
+	ang = math.vec2.angle(accum)
+	#log(ang)
+
+	theta_prev = pose.orientation.yaw
+
+	#If theres a obstacle as detected by proximity sensor >0, turn the direction
+	if (len < delta){
+		#log(rad2deg(theta_prev))
+		if ((counter > stepsize) or (counter<0)){
+			c_randomwalk(rid, theta_prev)
+		}
+		else{
+			set_wheels(left_ws, right_ws)
+			counter = counter +1  }
+			
+	 }
+
+	else if (ang > 0.0){
+		set_wheels(left_ws, 0.0)   }
+		else {
+			set_wheels(0.0, right_ws) }
+}
+
+
 function init() {
-  # Divide the swarm in three sub-swarms
-  s1 = swarm.create(1)
+	s1 = swarm.create(1)
 	s1.join()
 
-
 }
 
-# Executed every time step
+
 function step() {
-
-
-
+	s1.exec(avoid)
 }
 
-# Execute at exit
+
+function reset() {
+}
+
+
 function destroy() {
 }
