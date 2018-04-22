@@ -1,8 +1,8 @@
-max_x = 3
-min_x = -3
-max_y = 3
-min_y = -3
-total_grids = 12
+max_x = 5
+min_x = -5
+max_y = 5
+min_y = -5
+total_grids = 100
 axis_step = 1
 
 create_vstig = function(){
@@ -36,7 +36,12 @@ update = function(vid){
 		temp = v.get("d")
 		v.put("d",temp+1)}
 
+	t1 = v.get("a")
+	t2 = v.get("b")
+	t3 = v.get("c")
+	t4 = v.get("d")
 
+	log("Total: ",t1,",",t2,",",t3,",",t4)
 }
 
 
