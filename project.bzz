@@ -39,7 +39,7 @@ function get_range() {
 }
 
 function c_randomwalk(rid, theta_prev){
-	rho = math.rng.uniform(0.0,1.0)  #0.8
+	rho = 0.8 #math.rng.uniform(0.0,1.0) 
 	log(rho)
   mu = 0.0
 	a = math.cos(theta_prev - mu)
