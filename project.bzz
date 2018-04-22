@@ -1,5 +1,7 @@
 
 include "include/vec2.bzz"
+include "explore.bzz"
+
 # Threshold to detect obstacle
 delta = 0.1
 left_ws = 5.0
@@ -40,7 +42,7 @@ function get_range() {
 
 function c_randomwalk(rid, theta_prev){
 	rho = 0.8 #math.rng.uniform(0.0,1.0) 
-	log(rho)
+	#log(rho)
   mu = 0.0
 	a = math.cos(theta_prev - mu)
 	theta = (1-rho^2)/((2*pi)*(1+ rho^2 - 2*rho*a))
@@ -84,20 +86,37 @@ function avoid(){
 			set_wheels(0.0, right_ws) }
 }
 
+function whereami(){
+	
+	posx = pose.position.x
+	posy = pose.position.y
+	vid = find_vid(posx,posy)
+	#log(vid)
+	update(vid)
+	
+
+}
 
 function init() {
+
 	s1 = swarm.create(1)
 	s1.join()
-
+	create_vstig()
 }
 
 
 function step() {
 	s1.exec(avoid)
+	#log(pose.position.x)
+	#log(pose.position.y)
+	#log(pose.position.z)
+
+	s1.exec(whereami)
 }
 
 
 function reset() {
+	percent_explored()
 }
 
 
