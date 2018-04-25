@@ -39,6 +39,9 @@ function get_range() {
 	return range
 }
 
+############################################################################################################
+#### PROBLEM HERE#####################
+# The bots keep on rotating
 function c_randomwalk(rid, theta_prev){
 	rho = 0.7  #math.rng.uniform(0.0,1.0)
 	#log(rho)
@@ -60,6 +63,8 @@ function c_randomwalk(rid, theta_prev){
 
 }
 
+###############################################################################################
+
 #Obstacle avoidance
 function avoid(){
 	stepsize = 100
@@ -74,6 +79,7 @@ function avoid(){
 	if (len < delta){
 		#log(rad2deg(theta_prev))
 		
+		##############   Would be called at init and afterwards depending on the stepsize###########
 		if ( (counter<0) or (counter > stepsize) ){
 			c_randomwalk(rid, theta_prev)
 			counter = 0

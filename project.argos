@@ -29,7 +29,7 @@
         <!--kheperaiv_ground   implementation="rot_z_only" /-->
       </sensors>
       <!-- This loads the specified files at startup -->
-      <params bytecode_file="random_walk.bo" debug_file="random_walk.bdb" />
+      <params bytecode_file="project.bo" debug_file="project.bdb" />
 
       <params>
         <wheel_turning hard_turn_angle_threshold="90"
