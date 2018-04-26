@@ -4,10 +4,10 @@ include "explore.bzz"
 
 # Threshold to detect obstacle
 delta = 0.1
-left_ws = 5.0
-right_ws = 5.0
+left_ws = 15.0
+right_ws = 15.0
 pi = 22.0/7.0
-tol = 1 #degree tolerance
+tol = 10 #degree tolerance
 
 
 function rad2deg(angle){
@@ -54,11 +54,14 @@ function c_randomwalk(rid, theta_prev){
 	if (rad2deg(theta_prev)> (rad2deg(theta)-tol) and rad2deg(theta_prev)<(rad2deg(theta)+tol)){
 		#gotoc(math.sin(theta), math.cos(theta))
 		#gotoc(0, 0)
+		#set_wheels(0,0)
+		log("straight")
 		set_wheels(left_ws, right_ws)
 		}
 	else {
 		  #gotoc(math.sin(theta),math.cos(theta))
-			set_wheels(1.0, -1.0)
+			set_wheels(0.5, -0.5)
+			log("rotate")
 	}
 
 }
@@ -67,7 +70,7 @@ function c_randomwalk(rid, theta_prev){
 
 #Obstacle avoidance
 function avoid(){
-	stepsize = 100
+	stepsize = 1000
 	accum = get_range()
 	len = math.vec2.length(accum)
 	ang = math.vec2.angle(accum)
@@ -85,7 +88,6 @@ function avoid(){
 			counter = 0
 		}
 		else{
-			
 			counter = counter + 1
 			}
 }
@@ -138,6 +140,7 @@ function step() {
 
 
 function reset() {
+	#percent_explored()
 }
 
 

@@ -36,12 +36,7 @@ update = function(vid){
 		temp = v.get("d")
 		v.put("d",temp+1)}
 
-	t1 = v.get("a")
-	t2 = v.get("b")
-	t3 = v.get("c")
-	t4 = v.get("d")
-
-	#log("Total: ",t1,",",t2,",",t3,",",t4)
+	
 }
 
 
@@ -66,7 +61,7 @@ percent_explored = function(){
 	t3 = v.get("c")
 	t4 = v.get("d")
 
-	#log("Total: ",t1,",",t2,",",t3,",",t4)
+	log("Total: ",t1,",",t2,",",t3,",",t4)
 
 }
 
