@@ -4,10 +4,12 @@ include "explore.bzz"
 
 # Threshold to detect obstacle
 delta = 0.1
-left_ws = 15.0
-right_ws = 15.0
+left_ws = 5.0
+right_ws = 5.0
 pi = 22.0/7.0
-tol = 10 #degree tolerance
+tol = 5 #degree tolerance
+stepsize = 10
+
 
 
 function rad2deg(angle){
@@ -39,60 +41,42 @@ function get_range() {
 	return range
 }
 
-############################################################################################################
-#### PROBLEM HERE#####################
-# The bots keep on rotating
-function c_randomwalk(rid, theta_prev){
-	rho = 0.7  #math.rng.uniform(0.0,1.0)
-	#log(rho)
-  mu = 0.0
-	a = math.cos(theta_prev - mu)
-	theta = (1-rho^2)/((2*pi)*(1+ rho^2 - 2*rho*a))
-	log(rad2deg(theta))
-	#gotoc(math.sin(theta),math.cos(theta))
+# Correlated Random Walk
+function c_randomwalk(counter, theta_prev){
 
+	a = math.cos(theta_prev - mu)
+	theta = (1-rho^2)/((2*pi)*(1+ rho^2 - 2*rho*a))  #math.rng.gaussian(pi,-pi)
+	
+	
 	if (rad2deg(theta_prev)> (rad2deg(theta)-tol) and rad2deg(theta_prev)<(rad2deg(theta)+tol)){
-		#gotoc(math.sin(theta), math.cos(theta))
-		#gotoc(0, 0)
-		#set_wheels(0,0)
-		log("straight")
+		#log("straight")
 		set_wheels(left_ws, right_ws)
+		counter = counter +1
+		
 		}
-	else {
-		  #gotoc(math.sin(theta),math.cos(theta))
-			set_wheels(0.5, -0.5)
-			log("rotate")
+	else if((counter<0) or (counter>stepsize)){
+			gotoc(left_ws*math.sin(theta), right_ws*math.cos(theta))
+			counter = 0
+			#log(rad2deg(theta))
+			#log("rotate")
 	}
 
 }
 
-###############################################################################################
 
 #Obstacle avoidance
 function avoid(){
-	stepsize = 1000
+	
 	accum = get_range()
 	len = math.vec2.length(accum)
 	ang = math.vec2.angle(accum)
-	#log(ang)
 
 	theta_prev = pose.orientation.yaw
 
 	#If theres a obstacle as detected by proximity sensor >0, turn the direction
 	if (len < delta){
-		#log(rad2deg(theta_prev))
-		
-		##############   Would be called at init and afterwards depending on the stepsize###########
-		if ( (counter<0) or (counter > stepsize) ){
-			c_randomwalk(rid, theta_prev)
-			counter = 0
-		}
-		else{
-			counter = counter + 1
-			}
-}
-	 
-
+			c_randomwalk(counter, theta_prev)
+	} 
 	else if (ang > 0.0){
 		set_wheels(left_ws, 0.0)   }
 		else {
@@ -125,9 +109,13 @@ function init() {
 	s1 = swarm.create(1)
 	s1.join()
 	create_vstig()
-
-	counter = -1
-  ini = 0
+	
+	math.rng.setseed(id)
+	rho = math.rng.uniform(0.0,1.0)   #0.7
+	log(rho)
+	mu = 0.0
+	counter = -1  #for randomwalk
+  ini = 0		#for vid
 
 }
 
