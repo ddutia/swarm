@@ -1,0 +1,85 @@
+#Different navigation algorithms
+
+m=0.0
+rho = math.rng.uniform(0.0,1.0)   #0.7
+mu = 0.0
+left_ws = 20.0
+right_ws = 20.0
+pi = math.pi
+stepsize = 3
+
+function diffusion(){
+	set_wheels(left_ws, right_ws)
+}
+
+
+
+function simple_randomwalk(theta_prev,count){
+
+	theta = math.rng.gaussian(pi,-pi)
+	
+	if((count<0) or (count>stepsize)){
+			gotoc(left_ws*math.sin(theta), right_ws*math.cos(theta))
+			count = 0
+			
+	}
+	else{
+		set_wheels(left_ws, right_ws)
+		count = count +1
+	}
+	
+  
+}
+
+# Correlated Random Walk
+function c_randomwalk(theta_prev, count){
+
+	a = math.cos(theta_prev - mu)
+	theta = (1-rho^2)/((2*pi)*(1+ rho^2 - 2*rho*a))  #math.rng.gaussian(pi,-pi)
+	
+	if((count<0) or (count>stepsize)){
+			gotoc(left_ws*math.sin(theta), right_ws*math.cos(theta))
+			count = 0
+	}
+	else{
+		set_wheels(left_ws, right_ws)
+		count = count +1
+	}
+	
+  return count
+}
+
+function c_randomwalk1(theta_prev,count){
+
+	theta = math.rng.gaussian(-pi+m, pi+m)-pose.orientation.yaw
+	m=theta
+	if((count<0) or (count>stepsize)){
+			gotop(math.rng.gaussian(0.5*left_ws, 2*left_ws), theta)
+			count = 0
+	
+	}
+	else{
+		set_wheels(left_ws, right_ws)
+		count = count +1
+	}
+
+	return count
+}
+
+
+function c_randomwalk2(theta_prev,count){
+
+	theta = math.rng.gaussian(-pi+m, pi+m)- pose.orientation.yaw
+	m=theta
+	if((count<0) or (count>stepsize)){
+			gotop(left_ws, theta)
+			count = 0
+			
+	}
+	else{
+		set_wheels(left_ws, right_ws)
+		count = count +1
+	}
+
+	return count
+}

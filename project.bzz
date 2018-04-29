@@ -1,14 +1,15 @@
 
 include "include/vec2.bzz"
 include "explore.bzz"
+include "walk.bzz"
+
 
 # Threshold to detect obstacle
 delta = 0.1
-left_ws = 15.0
-right_ws = 15.0
+left_ws = 20.0
+right_ws = 20.0
 pi = math.pi
-tol = 10 #degree tolerance
-stepsize = 3
+stepsize = 10
 counter = -1
 ini = 0		#for vid
 
@@ -34,110 +35,52 @@ function reading2vec(rid, reading){
     return math.vec2.newp(reading.value, reading.angle)
 }
 
-# Accumulate proximity readings
-function get_range() {
+
+
+function init() {
+	s1 = swarm.create(1)
+	s1.join()
+	
+	create_vstig()
+	
+	math.rng.setseed(id)
+	
+	
+
+}
+
+
+function step() {
+	# Accumulate proximity readings
 	var range = math.vec2.new(0.0, 0.0)
   cart = map(proximity, reading2vec)
   range = reduce(cart, lj_sum, range)
 
-	return range
-}
-m=0
-function c_randomwalk(theta_prev){
-
-	a = math.cos(theta_prev - mu)
-	theta = math.rng.gaussian(pi,-pi)#(1-rho^2)/((2*pi)*(1+ rho^2 - 2*rho*a))  #math.rng.gaussian(pi,-pi)
-	
-	if((counter<0) or (counter>stepsize)){
-			#log(counter)
-			gotoc(left_ws*math.sin(theta), right_ws*math.cos(theta))
-			counter = 0
-			#log(rad2deg(theta))
-			#log("rotate")
-	}
-	else{
-		#log("straight")
-		set_wheels(left_ws, right_ws)
-		counter = counter +1
-	}
-	
-  
-}
-# Correlated Random Walk
-function c_randomwalk2(theta_prev){
-
-	a = math.cos(theta_prev - mu)
-	theta = math.rng.gaussian(-pi+m, pi+m)-pose.orientation.yaw
-	m=theta#(1-rho^2)/((2*pi)*(1+ rho^2 - 2*rho*a))  #math.rng.gaussian(pi,-pi)
-	log(theta)
-	if((counter<0) or (counter>stepsize)){
-			#log(counter)
-			gotop(math.rng.gaussian(0.5*left_ws, 2*left_ws), theta)
-			counter = 0
-			#log(rad2deg(theta))
-			#log("rotate")
-	}
-	else{
-		#log("straight")
-		set_wheels(left_ws, right_ws)
-		counter = counter +1
-	}
-	
-  
-}
-# Correlated Random Walk
-function c_randomwalk1(theta_prev){
-
-	a = math.cos(theta_prev - mu)
-	theta = math.rng.gaussian(-pi+m, pi+m)-pose.orientation.yaw
-	m=theta#(1-rho^2)/((2*pi)*(1+ rho^2 - 2*rho*a))  #math.rng.gaussian(pi,-pi)
-	log(theta)
-	if((counter<0) or (counter>stepsize)){
-			#log(counter)
-			gotop(left_ws, theta)
-			counter = 0
-			#log(rad2deg(theta))
-			#log("rotate")
-	}
-	else{
-		#log("straight")
-		set_wheels(left_ws, right_ws)
-		counter = counter +1
-	}
-	
-  
-}
-
-
-#Obstacle avoidance
-function avoid(){
-	
-	accum = get_range()
-	len = math.vec2.length(accum)
-	ang = math.vec2.angle(accum)
+	len = math.vec2.length(range)
+	ang = math.vec2.angle(range)
 
 	theta_prev = pose.orientation.yaw
 	
 	
 	#If theres a obstacle as detected by proximity sensor >0, turn the direction
 	if (len < delta){
-		#c_randomwalk(theta_prev)		
-		c_randomwalk1(theta_prev)
+		#diffusion()
+		counter = c_randomwalk(theta_prev,counter)		
+		#counter = c_randomwalk1(theta_prev,counter)
 	} 
 	else if (ang > 0.0){
 		set_wheels(left_ws, 0.0)   }
 		else {
 			set_wheels(0.0, right_ws) }
-}
 
-function whereami(){
 
+
+	#Determine the arena explored
 	posx = pose.position.x
 	posy = pose.position.y
 
 
 	vid = find_vid(posx,posy)
-	#log(vid)
 	if(ini==0){
 	vid_prev = vid
 	update(vid)
@@ -146,40 +89,13 @@ function whereami(){
 	
 	oldid = string.toint(vid_prev)
 	newid = string.toint(vid)
-	#log(oldid,newid)
 	if((oldid - newid) != 0){
-		log("Changing!")
-		log("Old: ", oldid, "New: ", newid)
+		#log("Changing!")
+		#log("Old: ", oldid, "New: ", newid)
 		update(vid)
 		vid_prev = vid}
 
 
-}
-
-function init() {
-	#log("init function")
-	s1 = swarm.create(1)
-	s1.join()
-	
-	create_vstig()
-	
-	math.rng.setseed(id)
-	rho = math.rng.uniform(0.0,1.0)   #0.7
-	#log(rho)
-	mu = 0.0
-	  
-
-}
-
-
-function step() {
-	s1.exec(avoid)
-	#posx = pose.position.x
-	#posy = pose.position.y
-	#loda = find_vid(rid, posx, posy)
-	#log(loda)
-	#log(posx,posy)
-	s1.exec(whereami)
 }
 
 
@@ -193,7 +109,7 @@ function reset() {
 
 function destroy() {
 	#log("Testing")
-	f = io.fopen("testFile.txt", "a")
-	f.fwrite("This is a test")
-	f.fclose()
+	#f = io.fopen("testFile.txt", "a")
+	#f.fwrite("This is a test")
+	#f.fclose()
 }
