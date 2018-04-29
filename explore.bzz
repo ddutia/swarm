@@ -69,7 +69,7 @@ find_vid = function(x,y){
 
 
 percent_explored = function(){
-f = io.fopen("testFile.txt", "a")
+f = io.fopen("testFile.csv", "a")
 var k = 1
 var j = 1
 while(k <= total_grids){

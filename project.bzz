@@ -4,8 +4,8 @@ include "explore.bzz"
 
 # Threshold to detect obstacle
 delta = 0.1
-left_ws = 20.0
-right_ws = 20.0
+left_ws = 15.0
+right_ws = 15.0
 pi = math.pi
 tol = 10 #degree tolerance
 stepsize = 3
@@ -121,8 +121,8 @@ function avoid(){
 	
 	#If theres a obstacle as detected by proximity sensor >0, turn the direction
 	if (len < delta){
-		c_randomwalk(theta_prev)		
-		#c_randomwalk1(theta_prev)
+		#c_randomwalk(theta_prev)		
+		c_randomwalk1(theta_prev)
 	} 
 	else if (ang > 0.0){
 		set_wheels(left_ws, 0.0)   }
