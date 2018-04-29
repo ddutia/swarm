@@ -1,24 +1,143 @@
 
 include "include/vec2.bzz"
+include "explore.bzz"
+
+# Threshold to detect obstacle
+delta = 0.1
+left_ws = 5.0
+right_ws = 5.0
+pi = 22.0/7.0
+tol = 10 #degree tolerance
+stepsize = 3
+counter = -1
 
 
 
-# Executed at init time
+function rad2deg(angle){
+	deg = angle*180/pi
+	return deg
+}
+
+function deg2rad(angle){
+	rad = angle*pi/180
+	return rad
+}
+
+
+# Accumulator of neighbor LJ interactions
+function lj_sum(rid, data, accum) {
+  return math.vec2.add(data, accum)
+}
+
+function reading2vec(rid, reading){
+    return math.vec2.newp(reading.value, reading.angle)
+}
+
+# Accumulate proximity readings
+function get_range() {
+	var range = math.vec2.new(0.0, 0.0)
+  cart = map(proximity, reading2vec)
+  range = reduce(cart, lj_sum, range)
+
+	return range
+}
+
+# Correlated Random Walk
+function c_randomwalk(theta_prev){
+
+	a = math.cos(theta_prev - mu)
+	theta = math.rng.gaussian(pi,-pi)#(1-rho^2)/((2*pi)*(1+ rho^2 - 2*rho*a))  #math.rng.gaussian(pi,-pi)
+	
+	if((counter<0) or (counter>stepsize)){
+			log(counter)
+			gotoc(left_ws*math.sin(theta), right_ws*math.cos(theta))
+			counter = 0
+			#log(rad2deg(theta))
+			log("rotate")
+	}
+	else{
+		log("straight")
+		set_wheels(left_ws, right_ws)
+		counter = counter +1
+	}
+	
+  
+}
+
+
+#Obstacle avoidance
+function avoid(){
+	
+	accum = get_range()
+	len = math.vec2.length(accum)
+	ang = math.vec2.angle(accum)
+
+	theta_prev = pose.orientation.yaw
+
+	#If theres a obstacle as detected by proximity sensor >0, turn the direction
+	if (len < delta){
+			c_randomwalk(theta_prev)
+	} 
+	else if (ang > 0.0){
+		set_wheels(left_ws, 0.0)   }
+		else {
+			set_wheels(0.0, right_ws) }
+}
+
+function whereami(){
+
+	posx = pose.position.x
+	posy = pose.position.y
+
+
+	vid = find_vid(posx,posy)
+	#log(vid)
+	if(ini==0){
+	vid_prev = vid
+	update(vid)
+	ini = 1
+	}
+
+	if((vid_prev - vid) != 0){
+		update(vid)
+		vid_prev = vid}
+
+
+}
+
 function init() {
-  # Divide the swarm in three sub-swarms
-  s1 = swarm.create(1)
+
+	s1 = swarm.create(1)
 	s1.join()
-
+	create_vstig()
+	
+	math.rng.setseed(id)
+	rho = math.rng.uniform(0.0,1.0)   #0.7
+	log(rho)
+	mu = 0.0
+	  #for randomwalk
+  ini = 0		#for vid
 
 }
 
-# Executed every time step
+
 function step() {
-
-
-
+	s1.exec(avoid)
+	
+	s1.exec(whereami)
 }
 
-# Execute at exit
+
+function reset() {
+	f = io.fopen("testFile.txt", "a")
+	f.fwrite("This is a test")
+	f.fclose()
+}
+
+
 function destroy() {
+	log("Testing")
+	f = io.fopen("testFile.txt", "a")
+	f.fwrite("This is a test")
+	f.fclose()
 }
