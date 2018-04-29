@@ -2,18 +2,27 @@ max_x = 5
 min_x = -5
 max_y = 5
 min_y = -5
-total_grids = 100
+total_grids = 10
 axis_step = 1
 
 create_vstig = function(){
+	log("Creating New Grid Virtual stigmergy")
 	v = stigmergy.create(1)
-	v.put("a", 0)
-	v.put("b", 0)
-	v.put("c", 0)
-	v.put("d", 0)
-
-	
-	#log("vstig: ",v.size())
+	k = 1
+	j = 1
+	while(k <= total_grids){
+		while(j <= total_grids){
+			row = string.tostring(k)
+			col = string.tostring(j)
+			location = string.concat(row, col)
+			v.put(location, 0)
+			j = j +1
+		}
+		j = 1
+		
+		k = k+1
+	}
+	log("vstig: ",v.size())
 	
 }
 
