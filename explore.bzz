@@ -7,7 +7,7 @@ axis_step = 1
 
 
 create_vstig = function(){
-	v = stigmergy.create(1)
+	#v = stigmergy.create(1)
 	k = 1
 	while(k <= grid_length){
 		log("a")
