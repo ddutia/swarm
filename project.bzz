@@ -4,9 +4,9 @@ include "explore.bzz"
 
 # Threshold to detect obstacle
 delta = 0.1
-left_ws = 5.0
-right_ws = 5.0
-pi = 22.0/7.0
+left_ws = 20.0
+right_ws = 20.0
+pi = math.pi
 tol = 10 #degree tolerance
 stepsize = 3
 counter = -1
@@ -42,8 +42,7 @@ function get_range() {
 
 	return range
 }
-
-# Correlated Random Walk
+m=0
 function c_randomwalk(theta_prev){
 
 	a = math.cos(theta_prev - mu)
@@ -52,6 +51,50 @@ function c_randomwalk(theta_prev){
 	if((counter<0) or (counter>stepsize)){
 			#log(counter)
 			gotoc(left_ws*math.sin(theta), right_ws*math.cos(theta))
+			counter = 0
+			#log(rad2deg(theta))
+			#log("rotate")
+	}
+	else{
+		#log("straight")
+		set_wheels(left_ws, right_ws)
+		counter = counter +1
+	}
+	
+  
+}
+# Correlated Random Walk
+function c_randomwalk2(theta_prev){
+
+	a = math.cos(theta_prev - mu)
+	theta = math.rng.gaussian(-pi+m, pi+m)-pose.orientation.yaw
+	m=theta#(1-rho^2)/((2*pi)*(1+ rho^2 - 2*rho*a))  #math.rng.gaussian(pi,-pi)
+	log(theta)
+	if((counter<0) or (counter>stepsize)){
+			#log(counter)
+			gotop(math.rng.gaussian(0.5*left_ws, 2*left_ws), theta)
+			counter = 0
+			#log(rad2deg(theta))
+			#log("rotate")
+	}
+	else{
+		#log("straight")
+		set_wheels(left_ws, right_ws)
+		counter = counter +1
+	}
+	
+  
+}
+# Correlated Random Walk
+function c_randomwalk1(theta_prev){
+
+	a = math.cos(theta_prev - mu)
+	theta = math.rng.gaussian(-pi+m, pi+m)-pose.orientation.yaw
+	m=theta#(1-rho^2)/((2*pi)*(1+ rho^2 - 2*rho*a))  #math.rng.gaussian(pi,-pi)
+	log(theta)
+	if((counter<0) or (counter>stepsize)){
+			#log(counter)
+			gotop(left_ws, theta)
 			counter = 0
 			#log(rad2deg(theta))
 			#log("rotate")
@@ -78,7 +121,8 @@ function avoid(){
 	
 	#If theres a obstacle as detected by proximity sensor >0, turn the direction
 	if (len < delta){
-			c_randomwalk(theta_prev)
+		c_randomwalk(theta_prev)		
+		#c_randomwalk1(theta_prev)
 	} 
 	else if (ang > 0.0){
 		set_wheels(left_ws, 0.0)   }
