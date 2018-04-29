@@ -108,6 +108,14 @@ function c_randomwalk1(theta_prev){
   
 }
 
+# Correlated Random Walk
+function diffuse(theta_prev){
+
+	set_wheels(left_ws, right_ws)
+	
+  
+}
+
 
 #Obstacle avoidance
 function avoid(){
@@ -121,8 +129,9 @@ function avoid(){
 	
 	#If theres a obstacle as detected by proximity sensor >0, turn the direction
 	if (len < delta){
-		#c_randomwalk(theta_prev)		
-		c_randomwalk1(theta_prev)
+		c_randomwalk1(theta_prev)		
+		#c_randomwalk1(theta_prev)
+		#diffuse(theta_prev)
 	} 
 	else if (ang > 0.0){
 		set_wheels(left_ws, 0.0)   }
@@ -192,8 +201,5 @@ function reset() {
 
 
 function destroy() {
-	#log("Testing")
-	f = io.fopen("testFile.txt", "a")
-	f.fwrite("This is a test")
-	f.fclose()
+	
 }
