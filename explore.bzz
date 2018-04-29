@@ -2,21 +2,32 @@ max_x = 5
 min_x = -5
 max_y = 5
 min_y = -5
-total_grids = 100
+grid_length = 10
 axis_step = 1
+
 
 create_vstig = function(){
 	v = stigmergy.create(1)
-	v.put("a", 0)
-	v.put("b", 0)
-	v.put("c", 0)
-	v.put("d", 0)
-
-	
+	k = 1
+	while(k <= grid_length){
+		log("a")
+	}
 	#log("vstig: ",v.size())
-	
 }
 
+# Find in which grid the robot is
+find_vid = function(x,y){
+		if(x>0){
+			if(y>0){ vid = 1}
+			else { vid = 4 }
+	}
+		else{
+			if(y>0){ vid = 2}
+			else { vid = 3}
+		}
+	return vid
+
+} 
 
 update = function(vid){
 	temp = 0
@@ -40,19 +51,7 @@ update = function(vid){
 }
 
 
-# Find in which grid the robot is
-find_vid = function(x,y){
-		if(x>0){
-			if(y>0){ vid = 1}
-			else { vid = 4 }
-	}
-		else{
-			if(y>0){ vid = 2}
-			else { vid = 3}
-		}
-	return vid
 
-} 
 
 percent_explored = function(){
 

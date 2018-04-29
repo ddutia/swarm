@@ -85,7 +85,7 @@ function avoid(){
 }
 
 function whereami(){
-
+	
 	posx = pose.position.x
 	posy = pose.position.y
 
@@ -106,11 +106,11 @@ function whereami(){
 }
 
 function init() {
-
+	#log("in init function")
 	s1 = swarm.create(1)
 	s1.join()
-	create_vstig()
 	
+	create_vstig()
 	math.rng.setseed(id)
 	rho = math.rng.uniform(0.0,1.0)   #0.7
 	log(rho)
@@ -124,20 +124,18 @@ function init() {
 function step() {
 	s1.exec(avoid)
 	
-	s1.exec(whereami)
+	#s1.exec(whereami)
 }
 
 
 function reset() {
-	f = io.fopen("testFile.txt", "a")
+	#log("Testing")
+	f = io.fopen("testFile.txt", "w")
 	f.fwrite("This is a test")
 	f.fclose()
 }
 
 
 function destroy() {
-	log("Testing")
-	f = io.fopen("testFile.txt", "a")
-	f.fwrite("This is a test")
-	f.fclose()
+	
 }
