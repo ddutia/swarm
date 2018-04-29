@@ -48,7 +48,7 @@ function c_randomwalk(theta_prev){
 
 	a = math.cos(theta_prev - mu)
 	theta = math.rng.gaussian(pi,-pi)#(1-rho^2)/((2*pi)*(1+ rho^2 - 2*rho*a))  #math.rng.gaussian(pi,-pi)
-	
+
 	if((counter<0) or (counter>stepsize)){
 			#log(counter)
 			gotoc(left_ws*math.sin(theta), right_ws*math.cos(theta))
@@ -61,25 +61,25 @@ function c_randomwalk(theta_prev){
 		set_wheels(left_ws, right_ws)
 		counter = counter +1
 	}
-	
-  
+
+
 }
 
 
 #Obstacle avoidance
 function avoid(){
-	
+
 	accum = get_range()
 	len = math.vec2.length(accum)
 	ang = math.vec2.angle(accum)
 
 	theta_prev = pose.orientation.yaw
-	
-	
+
+
 	#If theres a obstacle as detected by proximity sensor >0, turn the direction
 	if (len < delta){
 			c_randomwalk(theta_prev)
-	} 
+	}
 	else if (ang > 0.0){
 		set_wheels(left_ws, 0.0)   }
 		else {
@@ -111,9 +111,9 @@ function init() {
 	log("init function")
 	s1 = swarm.create(1)
 	s1.join()
-	
+
 	create_vstig()
-	
+
 	math.rng.setseed(id)
 	rho = math.rng.uniform(0.0,1.0)   #0.7
 	log(rho)
@@ -126,21 +126,19 @@ function init() {
 
 function step() {
 	s1.exec(avoid)
-	
+
 	#s1.exec(whereami)
 }
 
 
 function reset() {
-	f = io.fopen("testFile.txt", "a")
-	f.fwrite("This is a test")
-	f.fclose()
+	percent_explored()
 }
 
 
 function destroy() {
-	log("Testing")
-	f = io.fopen("testFile.txt", "a")
-	f.fwrite("This is a test")
-	f.fclose()
+	#log("Testing")
+	#f = io.fopen("testFile.txt", "a")
+	#f.fwrite("This is a test")
+	#f.fclose()
 }
