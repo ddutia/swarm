@@ -49,6 +49,14 @@ function init() {
 
 }
 
+# Correlated Random Walk
+function diffuse(theta_prev){
+
+	set_wheels(left_ws, right_ws)
+	
+  
+}
+
 
 function step() {
 	# Accumulate proximity readings
@@ -108,8 +116,12 @@ function reset() {
 
 
 function destroy() {
+<<<<<<< HEAD
 	#log("Testing")
 	#f = io.fopen("testFile.txt", "a")
 	#f.fwrite("This is a test")
 	#f.fclose()
+=======
+	
+>>>>>>> 38677c6785e7daaff52e97a89491cf7bdd10a618
 }
