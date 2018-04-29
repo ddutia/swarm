@@ -6,10 +6,10 @@ total_grids = 10
 axis_step = 1
 
 create_vstig = function(){
-	log("Creating New Grid Virtual stigmergy")
+	#log("Creating New Grid Virtual stigmergy")
 	v = stigmergy.create(1)
-	k = 1
-	j = 1
+	var k = 1
+	var j = 1
 	while(k <= total_grids){
 		while(j <= total_grids){
 			row = string.tostring(k)
@@ -22,55 +22,76 @@ create_vstig = function(){
 		
 		k = k+1
 	}
-	log("vstig: ",v.size())
+	
+	#log("vstig: ",v.size())
 	
 }
 
 
 update = function(vid){
-	temp = 0
-	if(vid == 1) {
-		temp = v.get("a")
-		v.put("a",temp+1)}
-
-	if(vid == 2) {
-		temp = v.get("b")
-		v.put("b",temp+1)}
-
-	if(vid == 3) {
-		temp = v.get("c")
-		v.put("c",temp+1)}
-
-	if(vid == 4) {
-		temp = v.get("d")
-		v.put("d",temp+1)}
-
 	
+	temp = v.get(vid)
+	v.put(vid,temp+1)
 }
 
 
 # Find in which grid the robot is
 find_vid = function(x,y){
-		if(x>0){
-			if(y>0){ vid = 1}
-			else { vid = 4 }
-	}
-		else{
-			if(y>0){ vid = 2}
-			else { vid = 3}
-		}
+		#Only 4 Quadrants 
+		#if(x>0){
+			#if(y>0){ vid = 1}
+			#else { vid = 4 }
+	#}
+		#else{
+			#if(y>0){ vid = 2}
+			#else { vid = 3}
+		#}
+	
+	newx= x+6
+	newy= 6-y
+	
+	xint_str = string.tostring(newx)
+	xint = string.toint(xint_str)
+	
+	yint_str = string.tostring(newy)
+	yint = string.toint(yint_str)
+		
+	col = string.tostring(xint)
+	row = string.tostring(yint)
+
+	vid = string.concat(row, col)
+	
+	#log("Robot",rid,":", vid)
 	return vid
 
 } 
 
+
+
 percent_explored = function(){
+f = io.fopen("testFile.txt", "a")
+var k = 1
+var j = 1
+while(k <= total_grids){
+	while(j <= total_grids){
+		#log("In the innermost loop")
+		row = string.tostring(k)
+		col = string.tostring(j)
+		location = string.concat(row, col)
+		location_print = string.concat(row, ",", col)
+		total = v.get(location)
 
-	t1 = v.get("a")
-	t2 = v.get("b")
-	t3 = v.get("c")
-	t4 = v.get("d")
+		iostring = string.concat(location_print, ",", string.tostring(total))
+		io.fwrite(f, iostring)
 
-	log("Total: ",t1,",",t2,",",t3,",",t4)
+		j = j +1
+	}
+	j = 1
+
+	k = k+1
+}
+
+	io.fclose(f)
 
 }
 

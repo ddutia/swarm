@@ -10,7 +10,7 @@ pi = 22.0/7.0
 tol = 10 #degree tolerance
 stepsize = 3
 counter = -1
-
+ini = 0		#for vid
 
 
 
@@ -99,8 +99,13 @@ function whereami(){
 	update(vid)
 	ini = 1
 	}
-
-	if((vid_prev - vid) != 0){
+	
+	oldid = string.toint(vid_prev)
+	newid = string.toint(vid)
+	#log(oldid,newid)
+	if((oldid - newid) != 0){
+		log("Changing!")
+		log("Old: ", oldid, "New: ", newid)
 		update(vid)
 		vid_prev = vid}
 
@@ -108,7 +113,7 @@ function whereami(){
 }
 
 function init() {
-	log("init function")
+	#log("init function")
 	s1 = swarm.create(1)
 	s1.join()
 	
@@ -116,30 +121,34 @@ function init() {
 	
 	math.rng.setseed(id)
 	rho = math.rng.uniform(0.0,1.0)   #0.7
-	log(rho)
+	#log(rho)
 	mu = 0.0
-	  #for randomwalk
-  ini = 0		#for vid
+	  
 
 }
 
 
 function step() {
 	s1.exec(avoid)
-	
-	#s1.exec(whereami)
+	#posx = pose.position.x
+	#posy = pose.position.y
+	#loda = find_vid(rid, posx, posy)
+	#log(loda)
+	#log(posx,posy)
+	s1.exec(whereami)
 }
 
 
 function reset() {
-	f = io.fopen("testFile.txt", "a")
-	f.fwrite("This is a test")
-	f.fclose()
+	percent_explored()
+	#f = io.fopen("testFile.txt", "a")
+	#io.fwrite(f, "This is a test")
+	#io.fclose(f)
 }
 
 
 function destroy() {
-	log("Testing")
+	#log("Testing")
 	f = io.fopen("testFile.txt", "a")
 	f.fwrite("This is a test")
 	f.fclose()
