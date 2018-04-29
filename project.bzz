@@ -7,8 +7,9 @@ delta = 0.1
 left_ws = 5.0
 right_ws = 5.0
 pi = 22.0/7.0
-tol = 5 #degree tolerance
-stepsize = 10
+tol = 10 #degree tolerance
+stepsize = 3
+counter = -1
 
 
 
@@ -42,25 +43,25 @@ function get_range() {
 }
 
 # Correlated Random Walk
-function c_randomwalk(counter, theta_prev){
+function c_randomwalk(theta_prev){
 
 	a = math.cos(theta_prev - mu)
-	theta = (1-rho^2)/((2*pi)*(1+ rho^2 - 2*rho*a))  #math.rng.gaussian(pi,-pi)
+	theta = math.rng.gaussian(pi,-pi)#(1-rho^2)/((2*pi)*(1+ rho^2 - 2*rho*a))  #math.rng.gaussian(pi,-pi)
 	
-	
-	if (rad2deg(theta_prev)> (rad2deg(theta)-tol) and rad2deg(theta_prev)<(rad2deg(theta)+tol)){
-		#log("straight")
-		set_wheels(left_ws, right_ws)
-		counter = counter +1
-		
-		}
-	else if((counter<0) or (counter>stepsize)){
+	if((counter<0) or (counter>stepsize)){
+			log(counter)
 			gotoc(left_ws*math.sin(theta), right_ws*math.cos(theta))
 			counter = 0
 			#log(rad2deg(theta))
-			#log("rotate")
+			log("rotate")
 	}
-
+	else{
+		log("straight")
+		set_wheels(left_ws, right_ws)
+		counter = counter +1
+	}
+	
+  
 }
 
 
@@ -75,7 +76,7 @@ function avoid(){
 
 	#If theres a obstacle as detected by proximity sensor >0, turn the direction
 	if (len < delta){
-			c_randomwalk(counter, theta_prev)
+			c_randomwalk(theta_prev)
 	} 
 	else if (ang > 0.0){
 		set_wheels(left_ws, 0.0)   }
@@ -114,7 +115,7 @@ function init() {
 	rho = math.rng.uniform(0.0,1.0)   #0.7
 	log(rho)
 	mu = 0.0
-	counter = -1  #for randomwalk
+	  #for randomwalk
   ini = 0		#for vid
 
 }
@@ -128,9 +129,15 @@ function step() {
 
 
 function reset() {
-	#percent_explored()
+	f = io.fopen("testFile.txt", "a")
+	f.fwrite("This is a test")
+	f.fclose()
 }
 
 
 function destroy() {
+	log("Testing")
+	f = io.fopen("testFile.txt", "a")
+	f.fwrite("This is a test")
+	f.fclose()
 }
