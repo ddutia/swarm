@@ -69,7 +69,7 @@ find_vid = function(x,y){
 
 
 percent_explored = function(){
-f = io.fopen("experiments/csv/levy_15_uniform_300.csv", "a")
+f = io.fopen("experiments/csv/crw2_5_uniform_300.csv", "a")
 var k = 1
 var j = 1
 while(k <= total_grids){

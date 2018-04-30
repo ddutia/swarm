@@ -58,8 +58,8 @@ function step() {
 		#counter = simple_randomwalk(theta_prev,counter)
 		#counter = c_randomwalk(theta_prev,counter)
 		#counter = c_randomwalk1(theta_prev,counter)
-		#counter = c_randomwalk2(theta_prev,counter)
-		counter = levy_walk(theta_prev,counter)
+		counter = c_randomwalk2(theta_prev,counter)
+		#counter = levy_walk(theta_prev,counter)
 
 	}
 	else if (ang > 0.0){
