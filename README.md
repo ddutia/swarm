@@ -1,2 +1,2 @@
-# RBE595 Swarm Intelligence COurse Project
+# RBE595 Swarm Intelligence Course Project
 

@@ -6,7 +6,19 @@ mu = 0.0
 left_ws = 20.0
 right_ws = 20.0
 pi = math.pi
-stepsize = 3
+stepsize = 10
+levy_step = 10
+
+
+function rad2deg(angle){
+	deg = angle*180/pi
+	return deg
+}
+
+function deg2rad(angle){
+	rad = angle*pi/180
+	return rad
+}
 
 function diffusion(){
 	set_wheels(left_ws, right_ws)
@@ -16,18 +28,18 @@ function diffusion(){
 
 function simple_randomwalk(theta_prev,count){
 
-	theta = math.rng.gaussian(pi,-pi)
+	theta = math.rng.gaussian(pi,0)
 	
 	if((count<0) or (count>stepsize)){
 			gotoc(left_ws*math.sin(theta), right_ws*math.cos(theta))
 			count = 0
-			
+			log(rad2deg(theta))
 	}
 	else{
 		set_wheels(left_ws, right_ws)
 		count = count +1
 	}
-	
+	return count
   
 }
 
@@ -51,7 +63,7 @@ function c_randomwalk(theta_prev, count){
 
 function c_randomwalk1(theta_prev,count){
 
-	theta = math.rng.gaussian(-pi+m, pi+m)-pose.orientation.yaw
+	theta = math.rng.gaussian(pi, m)-pose.orientation.yaw
 	m=theta
 	if((count<0) or (count>stepsize)){
 			gotop(math.rng.gaussian(0.5*left_ws, 2*left_ws), theta)
@@ -69,7 +81,7 @@ function c_randomwalk1(theta_prev,count){
 
 function c_randomwalk2(theta_prev,count){
 
-	theta = math.rng.gaussian(-pi+m, pi+m)- pose.orientation.yaw
+	theta = math.rng.gaussian(pi, m)- pose.orientation.yaw
 	m=theta
 	if((count<0) or (count>stepsize)){
 			gotop(left_ws, theta)
@@ -81,5 +93,23 @@ function c_randomwalk2(theta_prev,count){
 		count = count +1
 	}
 
+	return count
+}
+
+
+function levy_walk(theta_prev, count){
+
+	theta = math.rng.gaussian(pi,0)
+	
+	if((count<0) or (count>levy_step)){
+			gotoc(left_ws*math.sin(theta), right_ws*math.cos(theta))
+			count = 0
+			levy_step = math.rng.uniform(10,100)
+			log(levy_step)		
+	}
+	else{
+		set_wheels(left_ws, right_ws)
+		count = count +1
+	}
 	return count
 }

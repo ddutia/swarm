@@ -15,15 +15,7 @@ ini = 0		#for vid
 
 
 
-function rad2deg(angle){
-	deg = angle*180/pi
-	return deg
-}
 
-function deg2rad(angle){
-	rad = angle*pi/180
-	return rad
-}
 
 
 # Accumulator of neighbor LJ interactions
@@ -49,14 +41,6 @@ function init() {
 
 }
 
-# Correlated Random Walk
-function diffuse(theta_prev){
-
-	set_wheels(left_ws, right_ws)
-	
-  
-}
-
 
 function step() {
 	# Accumulate proximity readings
@@ -73,8 +57,11 @@ function step() {
 	#If theres a obstacle as detected by proximity sensor >0, turn the direction
 	if (len < delta){
 		#diffusion()
-		counter = c_randomwalk(theta_prev,counter)		
-		#counter = c_randomwalk1(theta_prev,counter)
+		#counter = c_randomwalk(theta_prev,counter)		
+		counter = c_randomwalk1(theta_prev,counter)
+		#counter = simple_randomwalk(theta_prev,counter)
+		#counter = levy_walk(theta_prev,counter)
+
 	} 
 	else if (ang > 0.0){
 		set_wheels(left_ws, 0.0)   }
@@ -116,12 +103,9 @@ function reset() {
 
 
 function destroy() {
-<<<<<<< HEAD
 	#log("Testing")
 	#f = io.fopen("testFile.txt", "a")
 	#f.fwrite("This is a test")
 	#f.fclose()
-=======
-	
->>>>>>> 38677c6785e7daaff52e97a89491cf7bdd10a618
+
 }
