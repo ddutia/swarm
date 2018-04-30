@@ -6,7 +6,7 @@ mu = 0.0
 left_ws = 20.0
 right_ws = 20.0
 pi = math.pi
-stepsize = 3
+stepsize = 10
 
 function diffusion(){
 	set_wheels(left_ws, right_ws)
@@ -16,7 +16,7 @@ function diffusion(){
 
 function simple_randomwalk(theta_prev,count){
 
-	theta = math.rng.gaussian(pi,-pi)
+	theta = math.rng.gaussian(pi,0)
 	
 	if((count<0) or (count>stepsize)){
 			gotoc(left_ws*math.sin(theta), right_ws*math.cos(theta))
@@ -28,7 +28,7 @@ function simple_randomwalk(theta_prev,count){
 		count = count +1
 	}
 	
-  
+  return count
 }
 
 # Correlated Random Walk
@@ -38,7 +38,7 @@ function c_randomwalk(theta_prev, count){
 	theta = (1-rho^2)/((2*pi)*(1+ rho^2 - 2*rho*a))  #math.rng.gaussian(pi,-pi)
 	
 	if((count<0) or (count>stepsize)){
-			gotoc(left_ws*math.sin(theta), right_ws*math.cos(theta))
+		gotoc(left_ws*math.sin(theta), right_ws*math.cos(theta))
 			count = 0
 	}
 	else{
@@ -51,7 +51,7 @@ function c_randomwalk(theta_prev, count){
 
 function c_randomwalk1(theta_prev,count){
 
-	theta = math.rng.gaussian(-pi+m, pi+m)-pose.orientation.yaw
+	theta = math.rng.gaussian(pi, m)-pose.orientation.yaw
 	m=theta
 	if((count<0) or (count>stepsize)){
 			gotop(math.rng.gaussian(0.5*left_ws, 2*left_ws), theta)
@@ -69,7 +69,7 @@ function c_randomwalk1(theta_prev,count){
 
 function c_randomwalk2(theta_prev,count){
 
-	theta = math.rng.gaussian(-pi+m, pi+m)- pose.orientation.yaw
+	theta = math.rng.gaussian(pi, m)- pose.orientation.yaw
 	m=theta
 	if((count<0) or (count>stepsize)){
 			gotop(left_ws, theta)
