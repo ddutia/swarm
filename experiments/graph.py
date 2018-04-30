@@ -3,7 +3,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 def main():
-    input = np.loadtxt("testFile.csv", dtype='i', delimiter=',')
+    input = np.loadtxt("csv/simplerw_10_300.csv", dtype='i', delimiter=',')
     #print(input)
     explored = 0
     arena = np.zeros([10,10])
@@ -26,6 +26,7 @@ def updateGrid(grid):
     # axes.set_ylim([0,9])
     #img = plt.imshow(grid, cmap='winter')
     #grd = plt.grid(True)
+    plt.savefig("figures/simplerw_10_300.png")
     plt.show()
 
 if __name__ == '__main__':

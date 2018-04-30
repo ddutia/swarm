@@ -9,7 +9,6 @@ delta = 0.1
 left_ws = 20.0
 right_ws = 20.0
 pi = math.pi
-stepsize = 10
 counter = -1
 ini = 0		#for vid
 
@@ -32,15 +31,14 @@ function reading2vec(rid, reading){
 function init() {
 	s1 = swarm.create(1)
 	s1.join()
-	
+
 	create_vstig()
-	
+
 	math.rng.setseed(id)
-	
-	
+
+
 
 }
-
 
 function step() {
 	# Accumulate proximity readings
@@ -52,17 +50,17 @@ function step() {
 	ang = math.vec2.angle(range)
 
 	theta_prev = pose.orientation.yaw
-	
-	
+
+
 	#If theres a obstacle as detected by proximity sensor >0, turn the direction
 	if (len < delta){
 		#diffusion()
-		#counter = c_randomwalk(theta_prev,counter)		
+		#counter = c_randomwalk(theta_prev,counter)
 		counter = c_randomwalk1(theta_prev,counter)
 		#counter = simple_randomwalk(theta_prev,counter)
 		#counter = levy_walk(theta_prev,counter)
 
-	} 
+	}
 	else if (ang > 0.0){
 		set_wheels(left_ws, 0.0)   }
 		else {
@@ -77,11 +75,11 @@ function step() {
 
 	vid = find_vid(posx,posy)
 	if(ini==0){
-	vid_prev = vid
-	update(vid)
-	ini = 1
+		vid_prev = vid
+		update(vid)
+		ini = 1
 	}
-	
+
 	oldid = string.toint(vid_prev)
 	newid = string.toint(vid)
 	if((oldid - newid) != 0){
@@ -96,16 +94,9 @@ function step() {
 
 function reset() {
 	percent_explored()
-	#f = io.fopen("testFile.txt", "a")
-	#io.fwrite(f, "This is a test")
-	#io.fclose(f)
 }
 
 
 function destroy() {
-	#log("Testing")
-	#f = io.fopen("testFile.txt", "a")
-	#f.fwrite("This is a test")
-	#f.fclose()
 
 }
