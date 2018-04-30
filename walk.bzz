@@ -7,7 +7,7 @@ left_ws = 20.0
 right_ws = 20.0
 pi = math.pi
 stepsize = 10
-<<<<<<< HEAD
+
 levy_step = 10
 
 
@@ -20,8 +20,6 @@ function deg2rad(angle){
 	rad = angle*pi/180
 	return rad
 }
-=======
->>>>>>> 82b272e87fb9f25b6036f9cf89d56c803d055e99
 
 function diffusion(){
 	set_wheels(left_ws, right_ws)
@@ -42,13 +40,9 @@ function simple_randomwalk(theta_prev,count){
 		set_wheels(left_ws, right_ws)
 		count = count +1
 	}
-<<<<<<< HEAD
+
 	return count
   
-=======
-	
-  return count
->>>>>>> 82b272e87fb9f25b6036f9cf89d56c803d055e99
 }
 
 # Correlated Random Walk
