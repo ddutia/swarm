@@ -4,9 +4,7 @@
 In any self-organized swarm, the member agents collectively judge the environment. It is desired to have this decision making process to be scalable, robust and reliable. To arrive at a consensus faster, the robots need to explore the environments in an effective way. 
 Purely random navigation based algorithms like diffusion are not suitable for exploring any unknown environment in an time-efficient manner. An efficient search algorithm is one which utilizes the power of multiple-robots instead of each robot exploring randomly. This ability comes from an correlated, or perhaps biased random walks which guarantees to cover maximum area of the surroundings, resulting in an responsive, usable system. 
 This work focuses on comparing various search algorithms for a robotic swarm on the basis of the time required to attain maximum coverage. The study experiments are implemented in ARGoS [1] multi-robot simulator using Buzz [2] programming language on a swarm of KheperaIV robots.
-Below is a comparison chart wherein x-axis represents the dif-ferent algorithms and y-axis is the percentage area exploredin the given setup:
 
-![Comparison chart](/home/dharini/Downloads/chart.png)
 
 ### Installation
 
